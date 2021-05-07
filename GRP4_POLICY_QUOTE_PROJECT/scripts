@@ -1,0 +1,145 @@
+CREATE USERROLE TABLE
+
+Create table UserRole (
+UserName Varchar2(20) NOT NULL,
+Passward  Varchar2(12) NOT NULL,
+Rolecode varchar2(10) NOT NULL,
+CONSTRAINT rf_user_name PRIMARY KEY(UserName)
+);
+=============================================
+ CREATE TABLE Role(
+        
+      RoleCode Number(5),
+      RoleName varchar2(20),
+     
+     CONSTRAINT pk_Role_RoleCode PRIMARY KEY(RoleCode)
+             
+
+);
+
+INSERT INTO Role values(1,'Insured');
+INSERT INTO Role values(2,'Agent');
+INSERT INTO Role values(3,'Admin');
+
+
+
+======================================================
+Create table UserRole  (
+UserName Varchar2(20) NOT NULL,
+Passward  Varchar2(12) NOT NULL,
+Rolecode Number(10) NOT NULL,
+CONSTRAINT fk_UserRole_RoleCode FOREIGN KEY(RoleCode) references Role,
+CONSTRAINT rf_user_name PRIMARY KEY(UserName)
+);
+
+
+INSERT INTO UserRole values ('jay','jay123',1);
+INSERT INTO UserRole values ('rejesh','rajesh123',2);
+INSERT INTO UserRole values ('kunal','kunal123',3);
+
+=========================================================================
+
+CREATE TABLE Business_segment(
+
+     bus_seg_id VARCHAR2(20),
+     bus_id NUMBER(10),
+     Business_Segment_Name Varchar2(30),
+
+CONSTRAINT PK_Business_Segment_Name Primary key(Business_Segment_Name)
+
+);
+
+INSERT INTO Business_segment values('AUTO',1,'BUSINESSAUTO');
+INSERT INTO Business_segment values('REST',2,'RESTAURANT');
+INSERT INTO Business_segment values('APART',3,'APARTMENT');
+INSERT INTO Business_segment values('MERCH',4,'MERCHANT');
+
+
+==================================================================================
+
+CREATE TABLE Account
+(
+
+Account_Number NUMBER(10) NOT NULL,
+Insured_Name Varchar2(30),
+Insured_Street Varchar2(40),
+Insured_City Varchar2(15),
+Insured_State Varchar2(15),
+Insured_Zip Varchar2(10),
+Business_Segment_Name Varchar2(30),
+User_Name Varchar2(20),
+CONSTRAINTS PK_Account_Number  PRIMARY KEY (Account_Number),
+CONSTRAINT rf_foreign FOREIGN KEY( User_Name) references UserRole
+CONSTRAINT rf_foreign1 FOREIGN KEY( Business_Segment_Name) references Business_segment
+);
+
+INSERT INTO Account VALUES(9999999,'Jay','kalewadi','pune','MAHARASHRA','55455','BUSINESSAUTO','jay');
+==================================================================================
+
+Policy:
+
+create sequence Policy_seq increment by 1 start with 10001;
+
+Create table Policy (
+Policy_Number Number(10),
+Policy_Premium number(10,2),
+Account_Number Number(10),
+CONSTRAINT Pr_key PRIMARY KEY(Policy_Number),
+CONSTRAINT fk_key FOREIGN KEY(Account_Number) references Account
+);
+
+
+INSERT INTO Policy values(Policy_seq.NEXTVAL,2500,9999999);
+
+
+
+
+=====================================================================================
+ Create table Policy_Details(
+ Policy_Number Number(10),
+ Business_Segment_Name Varchar2(30),
+ Answer Number(30),
+CONSTRAINT FK_1 FOREIGN KEY (Business_Segment_Name) references Business_segment,
+ CONSTRAINT FK_2 FOREIGN KEY (Policy_Number) references Policy
+ );
+
+INSERT into Policy_Details values(10001,'BUSINESSAUTO',888);
+
+
+*********************************************************
+======================================================================================
+
+Policy Ouestions:
+
+Create table Policy_Question(
+
+  bus_seg_id VARCHAR2(20),
+ Qid_seq varchar2(50),
+  Qid  Number(10),
+  Q_desc Varchar2(100),
+  Option1 Varchar2(30),
+Option2 Varchar2(30),
+Option3 Varchar2(30),
+
+
+CONSTRAINT PK_Policy_Question_qid PRIMARY KEY(  Qid),
+CONSTRAINT FK_Policy_Question_bus_seg_id  FOREIGN KEY(bus_seg_id) references Business_segment
+
+
+
+);
+=============================================================================
+
+create table Policy_question_weightage(
+
+options varchar2(20),
+weigtage number(10)
+
+
+);
+
+INSERT INTO Policy_question_weightage ( ' Option1',200);
+
+INSERT INTO Policy_question_weightage ( ' Option2',300);
+
+INSERT INTO Policy_question_weightage ( ' Option3',500);
